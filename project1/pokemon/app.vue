@@ -1,8 +1,12 @@
 <template>
      <div class="cards">
-     <card v-for="starter in starters" @click="fetchEvolutions(starter)">
+     <card 
+     v-for="starter in starters" 
+     @click="fetchEvolutions(starter)"
+     :class="{opace : selectedId && starter.id !== selectedId}"
+     class="card">
        <template v-slot:title>
-       {{starter.name}}
+       {{starter.name}} #{{starter.id}}
        </template>
        <template v-slot:content>
          <img :src="starter.sprite" />
@@ -15,9 +19,10 @@
        </card>
      </div>
        <div class="cards">
-       <card v-for="evolution in evolutions">
+       <card 
+       v-for="evolution in evolutions">
        <template v-slot:title>
-       {{evolution.name}}
+       {{evolution.name}} #{{evolution.id}}
        </template>
        <template v-slot:content>
          <img :src="evolution.sprite" />
@@ -29,8 +34,6 @@
          </template>
        </card>
        </div>
-
-   
 </template>
 
 <script>
@@ -49,13 +52,14 @@ export default {
     data(){
        return{
     starters: [],
-    evolutions: []
+    evolutions: [],
+    selectedId: null
        } 
     },
     methods: {
         async fetchEvolutions(pokemon){
           this.evolutions = await this.fetchData([pokemon.id+1, pokemon.id+2])
-          console.log(evolutions)
+          this.selectedId = pokemon.id
         },
         async fetchData(ids){
             const responses = await Promise.all(ids.map(id=>window.fetch(`${api}/${id}`))) 
@@ -80,5 +84,11 @@ export default {
 }
 img {
   width: 100%;
+}
+.opace{
+  opacity: 0.5;
+}
+.card:hover{
+   opacity: 1.0;
 }
 </style>
