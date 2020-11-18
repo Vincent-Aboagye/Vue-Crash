@@ -1,41 +1,67 @@
 <template>
-   <div class="cards">
-<div class="card" v-for="starter in starters">
-       <div class="title" >
-           {{starter.name}}
-       </div>
-       <div class="content">
+     <div class="cards">
+     <card v-for="starter in starters" @click="fetchEvolutions(starter)">
+       <template v-slot:title>
+       {{starter.name}}
+       </template>
+       <template v-slot:content>
          <img :src="starter.sprite" />
-       </div>
-       <div class="description">
-         <div v-for="types in starter.type">
+         </template>
+         <template v-slot:description>
+        <div v-for="types in starter.type">
            {{types}}
-           </div>
+        </div>
+         </template>
+       </card>
+     </div>
+       <div class="cards">
+       <card v-for="evolution in evolutions">
+       <template v-slot:title>
+       {{evolution.name}}
+       </template>
+       <template v-slot:content>
+         <img :src="evolution.sprite" />
+         </template>
+         <template v-slot:description>
+        <div v-for="types in evolution.type">
+           {{types}}
+        </div>
+         </template>
+       </card>
        </div>
-   </div>
-   </div>
+
    
 </template>
 
 <script>
+import Card from './Card.vue'
 const api = "https://pokeapi.co/api/v2/pokemon"
-const ids = [1, 4, 7]
+const STARTERIDS= [1, 4, 7]
 
 export default {
-  
-    created(){
-        this.fetchData()
+    components: {
+      Card
+    },
+    async created(){
+        const starters = await this.fetchData(STARTERIDS)
+        this.starters = starters
     },
     data(){
        return{
-    starters: []
+    starters: [],
+    evolutions: []
        } 
     },
     methods: {
-        async fetchData(){
+        async fetchEvolutions(pokemon){
+          this.evolutions = await this.fetchData([pokemon.id+1, pokemon.id+2])
+          console.log(evolutions)
+        },
+        async fetchData(ids){
             const responses = await Promise.all(ids.map(id=>window.fetch(`${api}/${id}`))) 
             const data = await Promise.all(responses.map(res=>res.json()))
-            this.starters = data.map(dat=> ({
+           return data.map(dat=> ({
+                id: dat.id,
                 name: dat.name,
                 sprite: dat.sprites.other['official-artwork'].front_default,
                 type: dat.types.map(type=> (type.type.name))
@@ -48,37 +74,11 @@ export default {
 </script>
 
 <style scoped>
+
 .cards{
   display: flex;
 }
-.card {
-  border: 1px solid silver;
-  border-radius: 8px;
-  max-width: 200px;
-  margin: 0 5px;
-  cursor: pointer;
-  box-shadow: 0px 1px 3px darkgrey;
-  transition: 0.2s;
-}
 img {
   width: 100%;
-}
-.title, .content, .description {
-  padding: 16px;
-  text-transform: capitalize;
-  text-align: center;
-}
-
-.title, .content {
-  border-bottom: 1px solid silver;
-}
-
-.title {
-  font-size: 1.25em;
-}
-
-.card:hover {
-  transition: 0.2s;
-  box-shadow: 0px 1px 9px darkgrey;
 }
 </style>
