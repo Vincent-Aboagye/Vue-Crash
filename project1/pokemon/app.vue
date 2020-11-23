@@ -19,8 +19,8 @@ export default {
       PokemonCard
     },
     async created(){
-        const starters = await this.fetchData(STARTERIDS)
-        this.starters = starters
+        const starter = await this.fetchData(STARTERIDS)
+        this.starters = starter
     },
     data(){
        return{
