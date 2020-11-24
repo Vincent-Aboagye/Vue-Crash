@@ -1,9 +1,11 @@
 <template>
    <div>
-   <button @click="increment">{{count}}</button>
-   <button @click="increase('a')">{{numbers.a}}</button>
-   <button @click="increase('b')">{{numbers.b}}</button>
-   {{total}}
+   <button @click="count++">{{count}}</button>
+   <button @click="a++">{{a}}</button>
+   <button @click="b++">{{b}}</button>
+   <div v-for="msg in history">
+       {{msg}}
+   </div>
    </div>
 </template>
 <script>
@@ -12,28 +14,31 @@ export default {
     
     setup(){
         const count = ref(0)
-        const numbers = reactive({
-            a: 0,
-            b: 0
-        })
+        const a = ref(0)
+        const b = ref(0)
+        const history = ref([])
+   
+    //using watch effect
+    watchEffect(()=>{
+        console.log(a.value, b.value)
+    })
 
-        const increase = (num) => {
-            numbers[num] += 1
+    //using watch
+    watch([a,b], ([newA, newB], [oldA, oldB])=>{
+        if(newA !== oldA){
+            history.value.push(`a: ${oldA} => ${newA}`)
         }
-
-        const increment = ()=>{
-            count.value += 1
+        if(newB !== oldB){
+            history.value.push(`b: ${oldB} => ${newB}`)
         }
-
-        
-
-        const total = computed( ()=> count.value + numbers.a + numbers.b )
+    })
+        const total = computed( ()=> count.value + a.value + b.value )
         return{
             total,
-            increase,
-            increment,
             count,
-            numbers
+            history,
+            a,
+            b
         }
     }
 }
