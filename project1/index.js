@@ -1,5 +1,9 @@
 import {createApp} from 'vue';
-import App from './MicoBlog/App.vue';
+import routerApp from './router/App.vue';
+import { router } from './router/router.js'
 
-createApp(App).mount('#app')
+
+const app = createApp(routerApp)
+app.use(router)
+app.mount('#app')
 
