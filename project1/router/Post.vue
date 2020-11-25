@@ -12,16 +12,21 @@ import {computed} from 'vue'
 import { useRoute, useRouter } from "vue-router";
 import { testPosts} from '../MicoBlog/testPosts.js'
 export default {
-    setup(){
-        const route = useRoute()
-        const post = computed(()=>{
-            return testPosts.find( x => x.id === parseInt(route.params.id) )
-        })
-
-        return {
-            post
+    computed:{
+        post(){ return testPosts.find( x => x.id === parseInt(this.$route.params.id) )
         }
     }
+
+    // setup(){
+    //     const route = useRoute()
+    //     const post = computed(()=>{
+    //         return testPosts.find( x => x.id === parseInt(route.params.id) )
+    //     })
+
+    //     return {
+    //         post
+    //     }
+    // }
  
 }
 </script>
