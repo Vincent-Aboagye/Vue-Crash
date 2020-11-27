@@ -1,9 +1,8 @@
 import {createApp} from 'vue';
-import vuexApp from './vuex/App.vue';
-import {store} from './vuex/store.js'
+import App from './photos/App.vue';
 
 
-const app = createApp(vuexApp)
-app.use(store)
+
+const app = createApp(App)
 app.mount('#app')
 
