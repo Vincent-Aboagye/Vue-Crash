@@ -1,4 +1,5 @@
 <template>
+<div>
     <label for="search">Search Hashtag: #</label>
     <input type="text" :value="currentHashtag" @input="setHashtag"/>
     <div class="cards">
@@ -13,6 +14,7 @@
              <Controls :post="post"/>
          </template>
     </card>
+    </div>
     </div>
 </template>
 

@@ -2,10 +2,7 @@
     <div>
        Count: {{count}} 
        <button @click="increment"> Increment </button>
-        </div>
-    
-    
-    
+    </div>
 </template>
 
 <script>
